@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
-import from kmeans get_data
+import kmeans
+import argparse
 
 class Point:
 
@@ -18,15 +19,8 @@ class Point:
                 self.neighborhood.append(x)
 
 
-def dbscan(argv):
-    file = argv[1]
-    epsilon = argv[2]
-    minPts = argv[3]
-
-    coreNum = 0
-    D = get_data(file)
-    D = D.to_numpy()
-
+def dbscan(D, epsilon, minPts):
+    # Getting the Cores and Points
     points = {}
     cores = []
     for x in D:
@@ -37,24 +31,25 @@ def dbscan(argv):
             cores.append(x)
         else:
             point.core = False
-        points[x] = point
+        points[tuple(x)] = point
 
     currentLabel = 0
     clusters = {}
-
+   
+    # Going through the cores and recursive call
     for x in cores:
-        point = points[x]
+        point = points[tuple(x)]
         point.visited = True
         if point.label == None:
             currentLabel += 1
             point.label = currentLabel
             DensityConnected(point, currentLabel, points)
 
-
-    cluster_list = [[] * currentLabel]
+    cluster_list = [[] for x in range(currentLabel)]
     noise = []
     border = []
 
+    #Classifying points
     for x in points.keys():
         point = points[x]
         if point.visited == True:
@@ -68,7 +63,7 @@ def dbscan(argv):
 def DensityConnected(point, clusterId, points):
 
     for x in point.neighborhood:
-        d = points[x]
+        d = points[tuple(x)]
         d.label = clusterId
         if d.visited == False:
             d.visited = True
@@ -78,6 +73,25 @@ def DensityConnected(point, clusterId, points):
 def distance(x1, x2):
    return (((x1-x2) **2) ** .5).sum()
 
+def main():
+   #Getting Arguments
+   parser = argparse.ArgumentParser("Run K Means Clustering on the dataset")
+   parser.add_argument("csv_path", help = "The filepath to the dataset")
+   parser.add_argument("-ep", required=True, help = "The epsilon value")
+   parser.add_argument("-minPts", required=True, help = "The minimum points for a point to be considered a core point")
+   parser.add_argument("-c", required=False, help = "The index of the class column")
+   parser.add_argument("-norm", required=False, help= "Set 1 to have to data normalized")
+   args = parser.parse_args()
+   # Get Data
+   D, class_col = kmeans.get_data(args.csv_path, args.c, args.norm)
+   D = D.to_numpy()
+   classes = {}
+   if class_col != None:
+      for x in range(len(D)):
+         classes[tuple(D[x])] = class_col[x]
+   cluster_list, cores, border, noise = dbscan(D, float(args.ep), float(args.minPts))
+
+
 
 if __name__ == '__main__':
-    dbscan()
+    main()

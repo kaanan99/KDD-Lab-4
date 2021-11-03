@@ -22,7 +22,6 @@ def get_data(csv_path, col=None, norm = None):
    Returns:
       A pandas dataframe 
    '''
-   print(norm)
    D = pd.read_csv(csv_path) 
    restrictions = list(D.iloc[0:])
    class_col = None
