@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import kmeans
 import argparse
+import math
 
 class Point:
 
@@ -73,6 +74,45 @@ def DensityConnected(point, clusterId, points):
 def distance(x1, x2):
    return (((x1-x2) **2) ** .5).sum()
 
+def find_max_min(cluster):
+   max_dist = -math.inf
+   min_dist = math.inf
+   total_avg = 0
+   for point in cluster:
+      point_avg = 0
+      for point2 in cluster:
+         if point != point2:
+            dist = distance(np.array(point), np.array(point2))
+            if dist > max_dist:
+               max_dist = dist
+            if dist < min_dist:
+               min_dist = dist
+            point_avg += dist
+      point_avg /=  len(cluster)
+      total_avg += point_avg
+   total_avg /= len(cluster)
+   return max_dist, min_dist, total_avg
+
+def print_output(cluster_list, noise, classes):
+   total = 0
+   for x in range(len(cluster_list)):
+      print("\nCluster " + str(x) + ":")
+      print("Points in cluster:", len(cluster_list[x]))
+      max_dist, min_dist, total_avg = find_max_min(cluster_list[x])
+      print("Maximum distance between two points:", max_dist)
+      print("Minimum distance between two points:", min_dist)
+      print("Average distance between points:", total_avg)
+      print("Points in Cluster:")
+      for point in cluster_list[x]:
+         class_val = ""
+         if len(classes) > 0:
+            class_val = classes[point]
+         print(point, class_val)
+         total += 1
+   print("\n Outliers:", len(noise), len(noise) / total)
+   for outlier in noise:
+      print(outlier)
+
 def main():
    #Getting Arguments
    parser = argparse.ArgumentParser("Run K Means Clustering on the dataset")
@@ -90,7 +130,7 @@ def main():
       for x in range(len(D)):
          classes[tuple(D[x])] = class_col[x]
    cluster_list, cores, border, noise = dbscan(D, float(args.ep), float(args.minPts))
-
+   print_output(cluster_list, noise, classes)
 
 
 if __name__ == '__main__':
