@@ -81,7 +81,7 @@ def find_max_min(cluster):
    for point in cluster:
       point_avg = 0
       for point2 in cluster:
-         if point != point2:
+         if np.any(np.array(point) != np.array(point2)):
             dist = distance(np.array(point), np.array(point2))
             if dist > max_dist:
                max_dist = dist

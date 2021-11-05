@@ -5,6 +5,8 @@ import kmeans
 import math
 import os
 import json
+import queue
+import dbscan
 
 class Tree:
    
@@ -90,6 +92,35 @@ def to_json(the_file, csv):
    with open(outpath, 'w') as f:
       json.dump(the_file, f)
 
+def get_clusters(dendogram, thr, points):
+   clusters = []
+   q = queue.Queue()
+   q.put(dendogram)
+   while not q.empty():
+      current = q.get()
+      if current.height <= thr:
+         clusters.append([points[int(x)] for x in current.name.split(", ")])
+      else:
+         q.put(current.left)
+         q.put(current.right)
+   return clusters
+
+def print_output(cluster_list, classes):
+   for x in range(len(cluster_list)):
+       print("\nCluster " + str(x) + ":")
+       print("Points in cluster:", len(cluster_list[x]))
+       max_dist, min_dist, total_avg = dbscan.find_max_min(cluster_list[x])
+       print("Maximum distance between two points:", max_dist)
+       print("Minimum distance between two points:", min_dist)
+       print("Average distance between points:", total_avg)
+       print("Points in Cluster:")
+       for point in cluster_list[x]:
+          class_val = ""
+          if len(classes) > 0:
+             class_val = classes[tuple(point)]
+          print(point, class_val)
+
+
 def main():
    # Get Arguments
    parser = argparse.ArgumentParser("Run K Means Clustering on the dataset")
@@ -99,7 +130,7 @@ def main():
    parser.add_argument("-norm", required=False, help= "Set 1 to have to data normalized")
    args = parser.parse_args()
    
-   #Setting Up
+   # Setting Up
    D, class_col = kmeans.get_data(args.csv_path, args.c, args.norm)
    D = D.to_numpy()
    classes = {}
@@ -125,7 +156,7 @@ def main():
       df = update_matrix(df, col1, col2) 
       adjust_tree(col1, col2, nodes, distance)
    
-   #Creating the Tree
+   # Creating the Tree
    node1 = nodes[0]
    node2 = nodes[1]
    distance = df.iloc[0,1]
@@ -135,6 +166,10 @@ def main():
    dendogram = root_node.to_dict(True)
    csv = os.path.basename(args.csv_path)
    to_json(dendogram, csv)
+
+   # Getting Clusters
+   clusters = get_clusters(root_node, float(args.t), points)
+   print_output(clusters, classes)
    
 if __name__ == '__main__':
    main()
