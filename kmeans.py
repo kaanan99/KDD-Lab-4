@@ -44,13 +44,18 @@ def get_data(csv_path, col=None, norm = None):
 def distance(x1, x2):
    return (((x1-x2) **2) ** .5).sum()
 
+
+def check_if_centroid(point, centroids):
+   for c in centroids:
+      if np.all(point == c):
+         return True
+   return False
+
 def find_farthest(D, centroids):
    max_distance = -math.inf 
    centroid = None
    for point in D:
-      if np.any(point == centroids):
-         pass
-      else:
+      if not check_if_centroid(point, centroids):
          current_distance = 0
          for c in centroids:
             current_distance += distance(point, c)
@@ -68,7 +73,7 @@ def select_initial(D, k):
    centroids = []
    centroids.append(find_farthest(D, [average]))
    for x in range(k-1):
-      new_centroid = find_farthest(D, [centroids])
+      new_centroid = find_farthest(D, centroids)
       centroids.append(new_centroid)
    return centroids
   
@@ -137,7 +142,6 @@ def main():
    parser.add_argument("-norm", required=False, help= "Set 1 to have to data normalized")
    args = parser.parse_args()
    # Setting Everything Up 
-   print(args.norm)
    D, class_col = get_data(args.csv_path, args.c, args.norm)
    D = D.to_numpy()
    classes = {}

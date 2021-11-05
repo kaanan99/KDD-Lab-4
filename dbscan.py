@@ -109,7 +109,8 @@ def print_output(cluster_list, noise, classes):
             class_val = classes[point]
          print(point, class_val)
          total += 1
-   print("\n Outliers:", len(noise), len(noise) / total)
+   if total > 0:
+      print("\n Outliers:", len(noise), len(noise) / total)
    for outlier in noise:
       print(outlier)
 
