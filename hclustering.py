@@ -168,8 +168,9 @@ def main():
    to_json(dendogram, csv)
 
    # Getting Clusters
-   clusters = get_clusters(root_node, float(args.t), points)
-   print_output(clusters, classes)
+   if args.t != None:
+      clusters = get_clusters(root_node, float(args.t), points)
+      print_output(clusters, classes)
    
 if __name__ == '__main__':
    main()
