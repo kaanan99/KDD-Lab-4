@@ -1,8 +1,8 @@
-CSC 466
-Lab 4
+CSC 466 <br>
+Lab 4 <br>
 
-Jacob Gold - jgold04@calpoly.edu
-Kaanan Kharwa - kkharwa@calpoly.edu 
+Jacob Gold - jgold04@calpoly.edu <br>
+Kaanan Kharwa - kkharwa@calpoly.edu <br>
 
 ## Files:
 * `kmeans.py`
