@@ -5,10 +5,10 @@ Jacob Gold - jgold04@calpoly.edu
 Kaanan Kharwa - kkharwa@calpoly.edu 
 
 ## Files:
-*`kmeans.py`
-*`dbscan.py`
-*`hclustering.py`
-*`visualize.py`
+* `kmeans.py`
+* `dbscan.py`
+* `hclustering.py`
+* `visualize.py`
 
 ## Kmeans Clustering - kmeans.py
 ### Compile instructions:
