@@ -177,6 +177,8 @@ def main():
    if args.v != None:
       if args.v == "1":
          visualize.plot_cluster_2D(clusters)
+      if args.v == "2":
+         visualize.plot_cluster_3D(clusters)
 
 if __name__ == '__main__':
    main()

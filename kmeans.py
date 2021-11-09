@@ -172,7 +172,8 @@ def main():
    if args.v != None:
       if args.v == "1":
          visualize.plot_cluster_2D(assignments)
-
+      if args.v == "2":
+         visualize.plot_cluster_3D(assignments)
 
 if __name__ == '__main__':
    main()
