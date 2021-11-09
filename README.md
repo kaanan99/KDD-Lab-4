@@ -12,7 +12,7 @@ Kaanan Kharwa - kkharwa@calpoly.edu <br>
 
 ## Kmeans Clustering - kmeans.py
 ### Compile instructions:
-`python3 kmeans.py`
+`python3 kmeans.py` <br>
 Required flags:
 1. [-k] num -> number of clusters
 2. dataset.csv -> input dataset
@@ -23,7 +23,7 @@ Optional flags:
 
 ## DBSCAN - dbscan.py
 ### Compile instructions:
-`python3 dbscan.py`
+`python3 dbscan.py`<br>
 Required flags:
 1. [-ep] num -> epsilon value for clusters
 2. [-minPts] num -> minimum points per cluster
@@ -35,7 +35,7 @@ Optional flags:
 
 ## Hierarchical Clustering - hclustering.py
 ### Compile instructions:
-`python3 hclustering.py [-h] dataset.csv`
+`python3 hclustering.py [-h] dataset.csv` <br>
 Required flags:
 1. [-t] num -> threshold value for clusters
 2. dataset.csv -> input dataset
