@@ -3,6 +3,7 @@ import pandas as pd
 import kmeans
 import argparse
 import math
+import visualize
 
 class Point:
 
@@ -122,6 +123,7 @@ def main():
    parser.add_argument("-minPts", required=True, help = "The minimum points for a point to be considered a core point")
    parser.add_argument("-c", required=False, help = "The index of the class column")
    parser.add_argument("-norm", required=False, help= "Set 1 to have to data normalized")
+   parser.add_argument("-v", required=False, help= "Set to 1 to get visualizatiton, only works on 2D data, use 2 for 3D visualization")
    args = parser.parse_args()
    # Get Data
    D, class_col = kmeans.get_data(args.csv_path, args.c, args.norm)
@@ -132,6 +134,9 @@ def main():
          classes[tuple(D[x])] = class_col[x]
    cluster_list, cores, border, noise = dbscan(D, float(args.ep), float(args.minPts))
    print_output(cluster_list, noise, classes)
+   if args.v != None:
+      if args.v == "1":
+         visualize.plot_cluster_2D(cluster_list)
 
 
 if __name__ == '__main__':

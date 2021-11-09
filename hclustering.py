@@ -7,6 +7,7 @@ import os
 import json
 import queue
 import dbscan
+import visualize
 
 class Tree:
    
@@ -107,7 +108,7 @@ def get_clusters(dendogram, thr, points):
 
 def print_output(cluster_list, classes):
    for x in range(len(cluster_list)):
-       print("\nCluster " + str(x) + ":")
+       print("\nCluster " + str(x + 1) + ":")
        print("Points in cluster:", len(cluster_list[x]))
        max_dist, min_dist, total_avg = dbscan.find_max_min(cluster_list[x])
        print("Maximum distance between two points:", max_dist)
@@ -128,6 +129,7 @@ def main():
    parser.add_argument("-t", required=False, help = "The value for the threshold")
    parser.add_argument("-c", required=False, help = "The index of the class column")
    parser.add_argument("-norm", required=False, help= "Set 1 to have to data normalized")
+   parser.add_argument("-v", required=False, help= "Set 1 to have a visualization of the data, only works on 2D datasets, use 2 for 3D dataset")
    args = parser.parse_args()
    
    # Setting Up
@@ -171,6 +173,10 @@ def main():
    if args.t != None:
       clusters = get_clusters(root_node, float(args.t), points)
       print_output(clusters, classes)
-   
+  
+   if args.v != None:
+      if args.v == "1":
+         visualize.plot_cluster_2D(clusters)
+
 if __name__ == '__main__':
    main()

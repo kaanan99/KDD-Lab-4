@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import argparse
 import math
+import visualize
 
 def normalize(x, max_val, min_val):
     '''
@@ -140,6 +141,7 @@ def main():
    parser.add_argument("-k", required=True, help = "The number of clusters")
    parser.add_argument("-c", required=False, help = "The index of the class column")
    parser.add_argument("-norm", required=False, help= "Set 1 to have to data normalized")
+   parser.add_argument("-v", required=False, help= "Set 1 to have a visualization of the data, only works on 2D data, use 2 for 3D data")
    args = parser.parse_args()
    # Setting Everything Up 
    D, class_col = get_data(args.csv_path, args.c, args.norm)
@@ -166,6 +168,10 @@ def main():
       prev_sse = calculate_SSE(centroids, assignments)
    #Print output
    print_output(centroids, assignments, classes, args.c)
+   
+   if args.v != None:
+      if args.v == "1":
+         visualize.plot_cluster_2D(assignments)
 
 
 if __name__ == '__main__':
